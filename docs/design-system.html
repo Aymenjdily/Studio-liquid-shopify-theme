@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Section Library — Design System (Studio)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font-display:'Lora',Georgia,serif;
+  --font-body:'Inter',system-ui,sans-serif;
+
+  /* Deep teal ramp (primary, sampled from Studio) */
+  --teal-50:#f2f8f8;
+  --teal-100:#e4f1f2;
+  --teal-300:#9dc9cd;
+  --teal-500:#2b8c93;
+  --teal-600:#1e757e;
+  --teal-700:#146069;   /* signature block color */
+  --teal-800:#114b52;
+  --teal-900:#0e3b41;
+
+  /* Ivory grounds */
+  --ivory:#f7f6f3;
+  --ivory-2:#efeeea;
+  --paper:#ffffff;
+
+  /* Ink */
+  --ink-900:#212729;
+  --ink-600:#4a5254;
+  --ink-400:#8a9293;
+  --ink-200:#d8dbd9;
+  --border:#e4e4e0;
+
+  /* Accents */
+  --coral-100:#f9e4da;
+  --coral-500:#e98d6b;
+  --coral-700:#c76b45;
+  --sand-100:#ece5d8;
+  --gold:#d9a441;
+
+  /* Radii */
+  --r-sm:8px; --r-md:14px; --r-lg:24px; --r-full:999px;
+
+  /* Elevation */
+  --sh-1:0 1px 3px rgba(14,59,65,.08);
+  --sh-2:0 6px 24px rgba(14,59,65,.12);
+
+  /* Spacing */
+  --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px; --s-7:32px; --s-8:40px; --s-9:48px; --s-10:64px; --s-11:88px;
+
+  /* Type scale */
+  --t-xs:.75rem; --t-sm:.875rem; --t-md:1rem; --t-lg:1.125rem;
+  --t-xl:1.35rem;
+  --t-2xl:clamp(1.4rem,1.1rem+1.4vw,1.8rem);
+  --t-3xl:clamp(1.8rem,1.4rem+2vw,2.5rem);
+  --t-4xl:clamp(2.2rem,1.6rem+2.6vw,3.25rem);
+  --t-5xl:clamp(2.6rem,1.8rem+3.6vw,4.25rem);
+
+  /* Motion */
+  --ease:cubic-bezier(.25,.6,.3,1);
+  --fast:150ms; --med:350ms;
+}
+
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body);
+  color:var(--ink-900);
+  background:var(--ivory);
+  font-size:var(--t-md); line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+
+.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+@media(max-width:960px){.shell{grid-template-columns:1fr}}
+nav{
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  background:var(--teal-900);color:#cfe2e3;padding:var(--s-7) var(--s-5);
+}
+@media(max-width:960px){nav{position:static;height:auto}}
+nav .logo{font-family:var(--font-display);font-style:italic;font-size:1.6rem;color:#fff;letter-spacing:.01em}
+nav .logo span{color:var(--teal-300);font-style:normal}
+nav .group{margin-top:var(--s-7);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.22em;color:#6f9a9e}
+nav a{display:block;padding:7px var(--s-3);margin-left:calc(var(--s-3)*-1);color:#cfe2e3;text-decoration:none;font-size:var(--t-sm);border-radius:var(--r-sm);transition:var(--fast) var(--ease)}
+nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+nav a.active{background:var(--teal-500);color:#fff}
+
+main{padding:var(--s-9) var(--s-8) var(--s-11);max-width:1120px}
+@media(max-width:960px){main{padding:var(--s-7) var(--s-4) var(--s-10)}}
+
+section.blk{margin-bottom:var(--s-11);scroll-margin-top:var(--s-5)}
+.kick{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.22em;color:var(--teal-600);margin-bottom:var(--s-3)}
+h2.sec{font-family:var(--font-display);font-weight:500;font-size:var(--t-3xl);letter-spacing:-.01em;margin-bottom:var(--s-3);padding-bottom:var(--s-5);border-bottom:1px solid var(--border,#e4e4e0)}
+p.desc{color:var(--ink-600);margin-bottom:var(--s-7);max-width:64ch}
+h3.sub{font-family:var(--font-display);font-weight:500;font-size:var(--t-xl);margin:var(--s-8) 0 var(--s-4)}
+
+.panel{background:var(--paper);border-radius:var(--r-md);padding:var(--s-6);box-shadow:var(--sh-1);margin-bottom:var(--s-4)}
+.grid{display:grid;gap:var(--s-4)}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.gauto{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:var(--s-3)}
+
+/* Swatches */
+.sw{background:var(--paper);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--sh-1)}
+.sw .chip{height:86px}
+.sw .meta{padding:var(--s-3) var(--s-4)}
+.sw .name{font-weight:600;font-size:var(--t-sm)}
+.sw .hex{font-size:var(--t-xs);color:var(--ink-400);font-family:ui-monospace,Consolas,monospace}
+
+/* Typography specimens */
+.tt{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s-5);padding:var(--s-5) 0;border-bottom:1px solid var(--ivory-2)}
+.tt:last-child{border:0}
+.tt .lb{min-width:170px;font-size:.68rem;font-weight:700;color:var(--ink-400);text-transform:uppercase;letter-spacing:.18em}
+.tt .ex{margin-left:auto;font-size:var(--t-xs);color:var(--ink-400);white-space:nowrap}
+.d1{font-family:var(--font-display);font-weight:500;font-size:var(--t-5xl);line-height:1.15;letter-spacing:.005em}
+.d2{font-family:var(--font-display);font-weight:500;font-size:var(--t-4xl);line-height:1.2}
+.d3{font-family:var(--font-display);font-weight:500;font-size:var(--t-3xl);line-height:1.25;max-width:22ch}
+.h1{font-family:var(--font-display);font-weight:500;font-size:var(--t-2xl)}
+.h2s{font-family:var(--font-display);font-weight:500;font-size:var(--t-xl)}
+.serif-it{font-family:var(--font-display);font-style:italic}
+.body{color:var(--ink-600)}
+.small{font-size:var(--t-sm);color:var(--ink-400)}
+.cap{font-size:.78rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-600)}
+
+/* Buttons & links */
+.btn{font-family:var(--font-body);font-weight:600;font-size:var(--t-sm);display:inline-flex;align-items:center;gap:var(--s-2);padding:11px 26px;border-radius:var(--r-full);border:1px solid transparent;cursor:pointer;text-decoration:none;line-height:1.25;transition:var(--fast) var(--ease)}
+.btn:active{transform:scale(.98)}
+.btn:focus-visible{outline:3px solid var(--teal-300);outline-offset:2px}
+.btn-primary{background:var(--teal-700);color:#f7f6f3}
+.btn-primary:hover{background:var(--teal-800)}
+.btn-light{background:#fff;color:var(--teal-800)}
+.btn-light:hover{background:var(--teal-50)}
+.btn-outline{background:transparent;color:var(--teal-800);border-color:var(--teal-700)}
+.btn-outline:hover{background:var(--teal-100)}
+.btn-dark{background:var(--ink-900);color:#fff}
+.btn-dark:hover{background:var(--ink-600)}
+.btn-sm{padding:8px 18px;font-size:var(--t-xs)}
+.btn-lg{padding:15px 32px;font-size:var(--t-md)}
+
+.alink{display:inline-flex;align-items:center;gap:8px;color:var(--teal-800);text-decoration:none;font-weight:600;font-size:var(--t-sm);border-bottom:1px solid transparent;transition:var(--fast) var(--ease)}
+.alink:hover{border-color:var(--teal-800)}
+.alink .arr{transition:var(--fast) var(--ease)}
+.alink:hover .arr{transform:translateX(4px)}
+
+/* Announcement bar demo */
+.announce{display:flex;justify-content:center;align-items:center;gap:10px;background:var(--ivory-2);border-radius:var(--r-full);padding:10px 24px;font-size:var(--t-sm);font-weight:500;color:var(--ink-900);max-width:560px}
+.announce .arr{transition:var(--fast) var(--ease)}
+.announce:hover .arr{transform:translateX(3px)}
+
+/* Dots carousel */
+.dots{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:var(--s-4)}
+.dot{width:9px;height:9px;border-radius:50%;background:transparent;border:1.5px solid var(--ink-600)}
+.dot.on{background:var(--ink-900)}
+
+/* Product card studio-style */
+.pcard{background:var(--paper);box-shadow:var(--sh-1);border-radius:var(--r-sm);overflow:hidden;text-align:center;transition:var(--med) var(--ease)}
+.pcard:hover{box-shadow:var(--sh-2);transform:translateY(-3px)}
+.pcard .img{height:250px;display:grid;place-items:center;position:relative}
+.pcard .frame{background:#eee;border:6px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.18);width:62%;aspect-ratio:4/5;display:grid;place-items:center;font-family:var(--font-display);color:var(--ink-400);font-size:var(--t-xs)}
+.pcard .stars{margin:var(--s-3) 0 6px;color:var(--gold);letter-spacing:3px;font-size:.85rem}
+.pcard .pn{font-size:.82rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-900)}
+.pcard .pv{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-400);margin:4px 0}
+.pcard .pp{font-weight:600;font-size:var(--t-sm)}
+
+/* Collage mosaic — Studio signature */
+.mosaic{display:grid;grid-template-columns:1fr 1fr;border-radius:var(--r-sm);overflow:hidden;min-height:480px}
+.mo-teal{background:var(--teal-700);color:#f1efea;display:flex;flex-direction:column;justify-content:center;padding:var(--s-8)}
+.mo-teal .h{font-family:var(--font-display);font-size:var(--t-2xl);line-height:1.3;max-width:22ch}
+.mo-img{min-height:240px}
+.mo-navy{background:var(--ivory);color:var(--teal-900);display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:var(--s-7)}
+@media(max-width:760px){.mosaic{grid-template-columns:1fr}}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:var(--r-full);font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.badge-teal{background:var(--teal-100);color:var(--teal-800)}
+.badge-coral{background:var(--coral-100);color:var(--coral-700)}
+.badge-sand{background:var(--sand-100);color:var(--ink-600)}
+.badge-ink{background:var(--ink-900);color:#fff}
+.badge-outline{border:1px solid var(--ink-200);color:var(--ink-600);background:transparent}
+
+/* Forms */
+.field{display:grid;gap:8px;max-width:340px}
+label,.lb2{font-size:var(--t-sm);font-weight:600}
+.in{font:inherit;font-size:var(--t-sm);padding:13px 16px;border:1px solid var(--ink-200);border-radius:var(--r-full);background:#fff;color:var(--ink-900);width:100%;transition:var(--fast) var(--ease)}
+.in::placeholder{color:var(--ink-400)}
+.in:focus{outline:none;border-color:var(--teal-500);box-shadow:0 0 0 3px var(--teal-100)}
+.in.err{border-color:var(--coral-700);box-shadow:0 0 0 3px var(--coral-100)}
+/* underline variant (newsletter) */
+.in-line{border:0;border-bottom:1px solid var(--ink-400);border-radius:0;background:transparent;padding:12px 2px}
+.in-line:focus{border-bottom-color:var(--teal-700);box-shadow:none}
+.check{display:flex;gap:10px;align-items:center;font-size:var(--t-sm)}
+
+/* Stars */
+.stars{color:var(--gold);letter-spacing:3px}
+
+/* Radius/shadow demo */
+.rd{height:80px;background:linear-gradient(150deg,var(--teal-100),var(--teal-300));display:grid;place-items:center;font-size:var(--t-xs);font-weight:700;color:var(--teal-900)}
+.shx{height:80px;background:#fff;border-radius:var(--r-sm);display:grid;place-items:center;font-size:var(--t-xs);font-weight:700;color:var(--ink-400)}
+
+/* Inverse scheme preview */
+.inv{background:var(--teal-700);color:#f1efea;border-radius:var(--r-md);padding:var(--s-6)}
+.inv .cap{color:var(--teal-100)}
+
+/* Motion pills */
+.mp{width:230px;height:46px;border-radius:var(--r-full);display:grid;place-items:center;color:#fff;font-weight:600;font-size:var(--t-sm);cursor:pointer}
+
+code{font-family:ui-monospace,Consolas,monospace;font-size:.85em;background:var(--ivory-2);border-radius:6px;padding:2px 7px}
+.note{margin-top:var(--s-5);padding:var(--s-5);background:var(--teal-50);border-radius:var(--r-sm);font-size:var(--t-sm);color:var(--teal-900);border:1px solid var(--teal-100)}
+table{width:100%;border-collapse:collapse;font-size:var(--t-sm)}
+th{font-size:.68rem;text-transform:uppercase;letter-spacing:.16em;color:var(--ink-400);text-align:left;padding:8px}
+td{padding:11px 8px;border-top:1px solid var(--ivory-2)}
+footer{color:var(--ink-400);font-size:var(--t-sm);padding:var(--s-6) 0 var(--s-10);font-style:italic;font-family:var(--font-display)}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav>
+  <div class="logo">Section<em>Library</em></div>
+  <div class="group">Foundations</div>
+  <a href="#colors" class="active">Color</a>
+  <a href="#type">Typography</a>
+  <a href="#space">Spacing & Grid</a>
+  <a href="#radius">Radii & Elevation</a>
+  <a href="#motion">Motion</a>
+  <div class="group">Patterns</div>
+  <a href="#buttons">Buttons & Links</a>
+  <a href="#announce">Announcement & Dots</a>
+  <a href="#cards">Product Cards</a>
+  <a href="#mosaic">Collage Mosaic</a>
+  <a href="#badges">Badges</a>
+  <a href="#forms">Forms & Newsletter</a>
+  <a href="#schemes">Color Schemes</a>
+  <div class="group">Mapping</div>
+  <a href="#mapping">Theme Settings</a>
+</nav>
+
+<main>
+<!-- COLOR -->
+<section class="blk" id="colors">
+  <div class="kick">Foundations</div>
+  <h2 class="sec">Color</h2>
+  <p class="desc">A gallery-inspired palette: deep teal anchors sections and frames imagery, ivory grounds keep it warm and editorial, and a soft coral provides sparing contrast for sales and urgency.</p>
+
+  <h3 class="sub">Deep teal — primary, blocks, inverse scheme</h3>
+  <div class="gauto">
+    <div class="sw"><div class="chip" style="background:#f2f8f8"></div><div class="meta"><div class="name">Teal 50</div><div class="hex">#F2F8F8</div></div></div>
+    <div class="sw"><div class="chip" style="background:#e4f1f2"></div><div class="meta"><div class="name">Teal 100</div><div class="hex">#E4F1F2</div></div></div>
+    <div class="sw"><div class="chip" style="background:#9dc9cd"></div><div class="meta"><div class="name">Teal 300</div><div class="hex">#9DC9CD</div></div></div>
+    <div class="sw"><div class="chip" style="background:#2b8c93"></div><div class="meta"><div class="name">Teal 500</div><div class="hex">#2B8C93</div></div></div>
+    <div class="sw"><div class="chip" style="background:#146069"></div><div class="meta"><div class="name">Teal 700 ★</div><div class="hex">#146069</div></div></div>
+    <div class="sw"><div class="chip" style="background:#0e3b41"></div><div class="meta"><div class="name">Teal 900</div><div class="hex">#0E3B41</div></div></div>
+  </div>
+
+  <h3 class="sub">Ivory & paper — page grounds</h3>
+  <div class="gauto">
+    <div class="sw"><div class="chip" style="background:#ffffff;border-bottom:1px solid #eee"></div><div class="meta"><div class="name">Paper</div><div class="hex">#FFFFFF</div></div></div>
+    <div class="sw"><div class="chip" style="background:#f7f6f3"></div><div class="meta"><div class="name">Ivory</div><div class="hex">#F7F6F3</div></div></div>
+    <div class="sw"><div class="chip" style="background:#efeeea"></div><div class="meta"><div class="name">Ivory 2</div><div class="hex">#EFEEEA</div></div></div>
+    <div class="sw"><div class="chip" style="background:#ece5d8"></div><div class="meta"><div class="name">Sand</div><div class="hex">#ECE5D8</div></div></div>
+  </div>
+
+  <h3 class="sub">Ink — type & rules</h3>
+  <div class="gauto">
+    <div class="sw"><div class="chip" style="background:#212729"></div><div class="meta"><div class="name">Ink 900</div><div class="hex">#212729</div></div></div>
+    <div class="sw"><div class="chip" style="background:#5a6163"></div><div class="meta"><div class="name">Ink 600</div><div class="hex">#5A6163</div></div></div>
+    <div class="sw"><div class="chip" style="background:#8a9293"></div><div class="meta"><div class="name">Ink 400</div><div class="hex">#8A9293</div></div></div>
+    <div class="sw"><div class="chip" style="background:#d8dbd9"></div><div class="meta"><div class="name">Ink 200</div><div class="hex">#D8DBD9</div></div></div>
+  </div>
+
+  <h3 class="sub">Accent & feedback</h3>
+  <div class="gauto">
+    <div class="sw"><div class="chip" style="background:#f9e4da"></div><div class="meta"><div class="name">Coral 100</div><div class="hex">#F9E4DA</div></div></div>
+    <div class="sw"><div class="chip" style="background:#e98d6b"></div><div class="meta"><div class="name">Coral 500</div><div class="hex">#E98D6B</div></div></div>
+    <div class="sw"><div class="chip" style="background:#c76b45"></div><div class="meta"><div class="name">Coral 700</div><div class="hex">#C76B45</div></div></div>
+    <div class="sw"><div class="chip" style="background:#d9a441"></div><div class="meta"><div class="name">Star gold</div><div class="hex">#D9A441</div></div></div>
+  </div>
+</section>
+
+<!-- TYPE -->
+<section class="blk" id="type">
+  <div class="kick">Foundations</div>
+  <h2 class="sec">Typography</h2>
+  <p class="desc"><strong>Lora</strong>, a contemporary editorial serif, carries headings and display copy in medium weight with positive tracking — the Studio signature. <strong>Inter</strong> handles UI, body and small caps. Type scales fluidly with <code>clamp()</code>.</p>
+  <div class="panel">
+    <div class="tt"><div class="lb">Display 1</div><div class="d1">Curated for exceptional taste</div><div class="ex">Lora 500 · t-5xl · lh 1.15</div></div>
+    <div class="tt"><div class="lb">Display 2</div><div class="d2">Hero & editorial headers</div><div class="ex">Lora 500 · t-4xl</div></div>
+    <div class="tt"><div class="lb">Display 3</div><div class="d3">Each piece chosen to reflect a cohesive aesthetic.</div><div class="ex">Lora 500 · t-3xl</div></div>
+    <div class="tt"><div class="lb">Heading 1</div><div class="h1">Card & modal titles</div><div class="ex">Lora 500 · t-2xl</div></div>
+    <div class="tt"><div class="lb">Heading 2</div><div class="h2s">Sub-headings</div><div class="ex">Lora 500 · t-xl</div></div>
+    <div class="tt"><div class="lb">Accent italic</div><div class="serif-it" style="font-size:var(--t-xl)">Pull quotes & announcements</div><div class="ex">Lora 400 italic</div></div>
+    <div class="tt"><div class="label lb">Body</div><div class="body" style="max-width:44ch">Inter regular at 16px with 1.65 line height for comfortable reading on every screen.</div><div class="ex">Inter 400 · t-md</div></div>
+    <div class="tt"><div class="label lb">Small</div><div class="small">Captions, helper text and meta at 14px.</div><div class="ex">Inter 400 · t-sm</div></div>
+    <div class="tt"><div class="label lb">Eyebrow</div><div class="cap">Shop by artist</div><div class="ex">Inter 600 · +22% tracking · uppercase</div></div>
+  </div>
+</section>
+
+<!-- SPACE -->
+<section class="blk" id="space">
+  <div class="kick">Foundations</div>
+  <h2 class="sec">Spacing & Grid</h2>
+  <p class="desc">4pt base. Generous editorial whitespace: section rhythm <code>88px</code> desktop / <code>56px</code> mobile, page gutter <code>20/40px</code>, content max <code>1200px</code>. Product grids: 3-up desktop, 2-up mobile with wide gutters.</p>
+  <div class="panel">
+    <div class="gauto">
+      <div><div style="width:8px;height:8px;background:var(--teal-700);border-radius:2px"></div><div class="cap" style="margin-top:8px;font-size:.68rem">4</div></div>
+      <div><div style="width:16px;height:16px;background:var(--teal-700);border-radius:3px"></div><div class="cap" style="margin-top:8px;font-size:.68rem">8</div></div>
+      <div><div style="width:24px;height:24px;background:var(--teal-700);border-radius:4px"></div><div class="cap" style="margin-top:8px;font-size:.68rem">12</div></div>
+      <div><div style="width:32px;height:32px;background:var(--teal-700);border-radius:5px"></div><div class="cap" style="margin-top:8px;font-size:.68rem">16</div></div>
+      <div><div style="width:48px;height:48px;background:var(--teal-700);border-radius:6px"></div><div class="cap" style="margin-top:8px;font-size:.68rem">24</div></div>
+      <div><div style="width:64px;height:64px;background:var(--teal-700);border-radius:7px"></div><div class="cap" style="margin-top:8px;font-size:.68rem">32</div></div>
+      <div><div style="width:88px;height:88px;background:var(--teal-700);border-radius:8px"></div><div class="cap" style="margin-top:8px;font-size:.68rem">44</div></div>
+    </div>
+    <div class="small" style="margin-top:var(--s-6)">Breakpoints — <strong>sm 480 · md 768 · lg 1024 · xl 1280</strong>, mobile-first <code>min-width</code> only.</div>
+  </div>
+</section>
+
+<!-- RADII -->
+<section class="blk" id="radius">
+  <div class="kick">Foundations</div>
+  <h2 class="sec">Radii & Elevation</h2>
+  <p class="desc">Quiet geometry — small radii on media, pills on buttons, and soft shadows that never outweigh imagery.</p>
+  <div class="panel">
+    <div class="gauto">
+      <div><div class="rd" style="border-radius:8px">sm 8</div></div>
+      <div><div class="rd" style="border-radius:14px">md 14</div></div>
+      <div><div class="rd" style="border-radius:24px">lg 24</div></div>
+      <div><div class="rd" style="border-radius:999px">full</div></div>
+    </div>
+    <h3 class="sub">Elevation</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:var(--s-5)">
+      <div class="shx" style="box-shadow:var(--sh-1)">Level 1 · resting</div>
+      <div class="shx" style="box-shadow:var(--sh-2)">Level 2 · hover/menu</div>
+      <div class="shx" style="box-shadow:0 16px 48px rgba(14,59,65,.2)">Level 3 · modal</div>
+    </div>
+  </div>
+</section>
+
+<!-- MOTION -->
+<section class="blk" id="motion">
+  <div class="kick">Foundations</div>
+  <h2 class="sec">Motion</h2>
+  <p class="desc">Composed, unhurried — the Studio feel. <code>150ms</code> taps, <code>350ms</code> transitions with a soft ease; image zooms and reveals ease gently. Reduced motion disables autoplay and marquees.</p>
+  <div class="panel" style="display:flex;gap:var(--s-5);flex-wrap:wrap">
+    <div class="mp" style="background:linear-gradient(135deg,#2b8c93,#146069)" onclick="this.style.width=this.style.width==='320px'?'230px':'320px'">tap — soft 150ms ↺</div>
+    <div class="mp" style="background:linear-gradient(135deg,#e98d6b,#c76b45)" onclick="this.style.borderRadius=this.style.borderRadius==='12px'?'999px':'12px'">tap — ease 350ms ↺</div>
+  </div>
+  <div class="note">Nothing exceeds 600ms; carousels pause on hover & focus; announcement marquee runs once per item.</div>
+</section>
+
+<!-- BUTTONS -->
+<section class="blk" id="buttons">
+  <div class="kick">Patterns</div>
+  <h2 class="sec">Buttons & Links</h2>
+  <p class="desc">Pills everywhere. On teal blocks, buttons invert to ivory. Arrow links with underline-on-hover carry the editorial navigation style (artist names, announcements, “Explore”).</p>
+  <div class="panel" style="display:grid;gap:var(--s-5)">
+    <div style="display:flex;gap:var(--s-4);flex-wrap:wrap;align-items:center">
+      <button class="btn btn-primary">Add to cart</button>
+      <button class="btn btn-outline">Explore</button>
+      <button class="btn btn-dark">Shop the look</button>
+      <button class="btn btn-light" style="background:var(--teal-700);color:#fff">On teal → swaps to light</button>
+    </div>
+    <div style="display:flex;gap:var(--s-4);flex-wrap:wrap;align-items:center">
+      <button class="btn btn-sm">Small · 34px</button>
+      <button class="btn">Medium · 42px</button>
+      <button class="btn btn-lg">Large · 50px</button>
+    </div>
+    <div style="display:flex;gap:var(--s-6);flex-wrap:wrap;align-items:center;border-top:1px solid var(--ivory-2);padding-top:var(--s-5)">
+      <a class="alink" href="#buttons">Rachel Crummey <span class="arr">→</span></a>
+      <a class="alink" href="#buttons">View all artists <span class="arr">→</span></a>
+      <a class="alink" href="#buttons" style="font-family:var(--font-display);font-weight:500">Shop prints <span class="arr">→</span></a>
+    </div>
+    <div class="small">Disabled = 40% opacity. Focus ring teal-300. Min target 44px on touch.</div>
+  </div>
+</section>
+
+<!-- ANNOUNCE -->
+<section class="blk" id="announce">
+  <div class="kick">Patterns</div>
+  <h2 class="sec">Announcement Bar & Carousel Dots</h2>
+  <div class="panel" style="display:grid;gap:var(--s-6)">
+    <div class="announce">Discover our newest collection from Leia Bryans <span class="arr">→</span></div>
+    <div style="display:flex;gap:var(--s-5);align-items:center;justify-content:center">
+      <button class="dot" aria-label="Slide 1"></button>
+      <button class="dot on" aria-label="Slide 2"></button>
+      <button class="dot" aria-label="Slide 3"></button>
+      <button class="dot" aria-label="Slide 4"></button>
+    </div>
+    <div class="small" style="text-align:center">Dots: 9px hollow circles, filled when active. Announcement bar is full-width ivory strip above header with centered copy + arrow.</div>
+  </div>
+</section>
+
+<!-- CARDS -->
+<section class="blk" id="cards">
+  <div class="kick">Patterns</div>
+  <h2 class="sec">Product Cards</h2>
+  <p class="desc">Centred, gallery-like: artwork on tinted ground, letter-spaced small-caps title + vendor, price beneath. Hover reveals second image or quick-add.</p>
+  <div class="g2">
+    <div class="pcard">
+      <div class="img img" style="background:var(--ivory-2)"><div class="frame frame" style="aspect-ratio:4/5;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.15);width:58%;display:grid;place-items:center;font-family:var(--font-display);color:var(--ink-400);font-size:.8rem">artwork</div></div>
+      <div class="stars">★★★★★</div>
+      <div class="pn">Seven Vessels 2</div>
+      <div class="pv">Leia Bryans</div>
+      <div class="pp" style="padding-bottom:16px">$250.00 CAD</div>
+    </div>
+    <div class="pcard">
+      <div class="img" style="background:var(--teal-100);position:relative"><span class="badge badge-coral" style="position:absolute;top:12px;left:12px;background:#fff;color:var(--coral-700);box-shadow:var(--sh-1)">Sale</span><div class="frame" style="aspect-ratio:4/5;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.15);width:58%;display:grid;place-items:center;font-family:var(--font-display);color:var(--ink-400);font-size:.8rem">artwork</div></div>
+      <div class="stars" style="opacity:.25">★★★★★</div>
+      <div class="pn">Mur Vessel 3</div>
+      <div class="pv">Misbah Ahmed</div>
+      <div class="pp" style="padding-bottom:16px">$425.00 CAD <s class="small">$575.00</s></div>
+    </div>
+  </div>
+</section>
+
+<!-- MOSAIC -->
+<section class="blk" id="mosaic">
+  <div class="kick">Patterns</div>
+  <h2 class="sec">Collage Mosaic</h2>
+  <p class="desc">Studio's signature pattern for our sections: imagery framed by solid teal color blocks, editorial serif copy inside blocks, generous internal padding.</p>
+  <div class="mosaic panel" style="padding:0">
+    <div class="mo-teal">
+      <div class="h">Each piece is chosen to reflect a cohesive, contemporary aesthetic.</div>
+    </div>
+    <div class="mo-img" style="background:linear-gradient(160deg,#e98d6b,#c76b45 55%,#8a9293)"></div>
+    <div class="mo-img" style="background:linear-gradient(20deg,#ece5d8,#d8dbd9)"></div>
+    <div class="mo-teal mo-navy" style="background:var(--teal-700)">
+      <div class="h" style="margin-bottom:var(--s-5)">Build or enhance your collection</div>
+      <button class="btn btn-light btn-sm">Explore</button>
+    </div>
+  </div>
+  <div class="note">Used by: shoppable image, shoppable gallery (hotspot frames), collection tabs headers, hero fallback layout.</div>
+</section>
+
+<!-- BADGES -->
+<section class="blk" id="badges">
+  <div class="kick">Patterns</div>
+  <h2 class="sec">Badges</h2>
+  <div class="panel" style="display:flex;gap:var(--s-3);flex-wrap:wrap">
+    <span class="badge badge-teal">New arrival</span>
+    <span class="badge badge-coral">Sale −20%</span>
+    <span class="badge badge-sand">Limited edition</span>
+    <span class="badge badge-ink">Original</span>
+    <span class="badge badge-outline">Print</span>
+    <span class="badge badge-coral" style="background:#fff;box-shadow:var(--sh-1)"><span class="stars" style="color:var(--gold);font-size:.65rem;letter-spacing:1px">★★★★★</span> 4.9</span>
+  </div>
+</section>
+
+<!-- FORMS -->
+<section class="blk" id="forms">
+  <div class="kick">Patterns</div>
+  <h2 class="sec">Forms & Newsletter</h2>
+  <div class="panel" style="display:grid;gap:var(--s-6)">
+    <div class="g2">
+      <div style="display:grid;gap:var(--s-5)">
+        <div class="field"><label>Email address</label><input class="in" placeholder="you@example.com"></div>
+        <div class="field"><label>Focus</label><input class="in" value="Focused state"></div>
+        <div class="field"><label>Error</label><input class="in err" value="not-an-email"><span class="small" style="color:var(--coral-700)">Please enter a valid email address.</span></div>
+      </div>
+      <div style="display:grid;gap:var(--s-5);align-content:start">
+        <div class="cap">Newsletter — underline variant (Studio-style)</div>
+        <div class="field" style="max-width:340px"><label class="lb2 cap" style="margin-bottom:10px">Be the first to know</label>
+          <div style="display:flex;gap:12px"><input class="in in-line" placeholder="Email address"><button class="btn btn-primary btn-sm">Subscribe</button></div>
+        </div>
+        <label class="check"><input type="checkbox" checked> &nbsp;Email me new arrivals (consent)</label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEMES -->
+<section class="blk" id="schemes">
+  <div class="kick">Foundations</div>
+  <h2 class="sec">Color Schemes</h2>
+  <p class="desc">Two editor schemes map 1:1 to Shopify <code>color_scheme</code>: Ivory (default content sections) and Teal block (hero, mosaic, footer, countdown).</p>
+  <div class="g2">
+    <div class="panel" style="background:var(--paper)">
+      <div class="cap" style="color:var(--teal-600);margin-bottom:var(--s-3)">ivory · default</div>
+      <div class="h1" style="margin-bottom:var(--s-3)">Content sections</div>
+      <p class="small" style="margin-bottom:var(--s-5)">Page #F7F6F3 · cards #FFF · ink text · teal actions</p>
+      <button class="btn btn-primary btn-sm">Primary</button> <button class="btn btn-outline btn-sm">Secondary</button>
+    </div>
+    <div class="inv">
+      <div class="cap" style="margin-bottom:var(--s-3)">teal · block / inverse</div>
+      <div class="h1" style="margin-bottom:var(--s-3);color:#f1efea">Hero, mosaic & footer</div>
+      <p class="small" style="margin-bottom:var(--s-5);color:var(--teal-100)">Page #146069 · text ivory · buttons ivory → teal text</p>
+      <button class="btn btn-light btn-sm">Primary</button> <button class="btn btn-sm" style="border:1px solid rgba(255,255,255,.5);color:#fff">Secondary</button>
+    </div>
+  </div>
+</section>
+
+<!-- MAPPING -->
+<section class="blk" id="mapping">
+  <div class="kick">Mapping</div>
+  <h2 class="sec">Theme Settings Map</h2>
+  <div class="panel">
+    <table>
+      <tr><th>Token</th><th>Theme setting</th><th>Value</th></tr>
+      <tr style="border-top:1px solid var(--ivory-2)"><td>Display/headings</td><td><code>type_header_font</code></td><td>Lora 500 (Shopify font pick: ≈Sentient/Lora)</td></tr>
+      <tr style="border-top:1px solid var(--ivory-2)"><td>Body/UI</td><td><code>type_body_font</code></td><td>Inter 400–600</td></tr>
+      <tr style="border-top:1px solid var(--ivory-2)"><td>Teal 700</td><td><code>button / scheme primary</code></td><td>#146069</td></tr>
+      <tr style="border-top:1px solid var(--ivory-2)"><td>Ivory</td><td><code>colors_background_1</code></td><td>#F7F6F3</td></tr>
+      <tr style="border-top:1px solid var(--ivory-2)"><td>Ink 900</td><td><code>colors_text</code></td><td>#212729</td></tr>
+      <tr style="border-top:1px solid var(--ivory-2)"><td>Teal block</td><td><code>color_scheme</code> “block”</td><td>hero · mosaic · footer · countdown</td></tr>
+      <tr style="border-top:1px solid var(--ivory-2)"><td>Pill buttons</td><td><code>buttons_border_radius</code></td><td>999px</td></tr>
+    </table>
+    <div class="note">Every section schema exposes: color scheme picker, corner radius, padding top/bottom. Sections inherit this system from theme settings — no hardcoded values in the 12 sections.</div>
+  </div>
+</section>
+
+<footer>Section Library design system — Studio edition · Lora + Inter · v2.0</footer>
+</main>
+</div>
+<script>
+const links=document.querySelectorAll('nav a');
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id))}})},{rootMargin:'-15% 0px -70% 0px'});
+document.querySelectorAll('section.blk').forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,568 @@
+{{ 'section-hero-video.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'hero-video.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign overlay_layout = false
+  if section.settings.text_layout == 'overlay'
+    assign overlay_layout = true
+  endif
+  assign slide_count = section.blocks.size
+  assign bundled_widths = '750,1100,1500,2000,2400' | split: ','
+  assign carousel_label = section.settings.accessibility_label | default: section.settings.heading | strip_html | escape
+  assign show_controls = false
+  if slide_count > 1
+    assign show_controls = true
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.intro_padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.intro_padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.intro_padding_top }}px;
+      padding-bottom: {{ section.settings.intro_padding_bottom }}px;
+    }
+  }
+  #HeroVideo-{{ section.id }} {
+    --hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --hero-overlay-color: {{ section.settings.overlay_color }};
+    --hero-overlay-height: {{ section.settings.overlay_height }}svh;
+  }
+{%- endstyle -%}
+
+{%- capture intro_content -%}
+  {%- unless section.settings.eyebrow == blank -%}
+    <p class="hero-video__eyebrow caption-with-letter-spacing">{{ section.settings.eyebrow }}</p>
+  {%- endunless -%}
+  {%- unless section.settings.heading == blank -%}
+    <h2 class="hero-video__heading {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+  {%- endunless -%}
+  {%- unless section.settings.subheading == blank -%}
+    <p class="hero-video__subheading">{{ section.settings.subheading }}</p>
+  {%- endunless -%}
+  {%- unless section.settings.button_label == blank -%}
+    <a
+      {% if section.settings.button_link == blank %}
+        role="link" aria-disabled="true"
+      {% else %}
+        href="{{ section.settings.button_link }}"
+      {% endif %}
+      class="button hero-video__cta{% if section.settings.button_outline %}{% if overlay_layout %} button--outline-light{% else %} button--secondary{% endif %}{% endif %}"
+    >
+      {{ section.settings.button_label | escape }}
+    </a>
+  {%- endunless -%}
+{%- endcapture -%}
+
+<div class="hero-video-section color-{{ section.settings.color_scheme }} gradient">
+  {%- unless overlay_layout -%}
+    {%- comment -%} Studio pattern: centered serif headline above a page-width media stage {%- endcomment -%}
+    <div class="hero-video__intro section-{{ section.id }}-padding">
+      <div class="hero-video__blocks">{{ intro_content }}</div>
+    </div>
+  {%- endunless -%}
+
+  <hero-video
+    id="HeroVideo-{{ section.id }}"
+    class="hero-video hero-video--{{ section.settings.media_height }}{% if overlay_layout %} hero-video--overlay{% endif %}{% unless section.settings.full_width %} page-width{% endunless %}"
+    role="region"
+    aria-roledescription="{{ 'sections.slideshow.carousel' | t }}"
+    aria-label="{{ carousel_label }}"
+    data-autoplay="{{ section.settings.autoplay }}"
+    data-speed="{{ section.settings.autoplay_speed }}"
+  >
+    <div class="hero-video__viewport">
+      <div
+        class="hero-video__track"
+        id="HeroVideoTrack-{{ section.id }}"
+        {% if show_controls %}
+          aria-live="polite" aria-atomic="true"
+        {% endif %}
+      >
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign poster = block.settings.image | default: block.settings.video.preview_image
+            assign video_id = block.settings.video_url.id
+            assign slide_alt = block.settings.alt | default: poster.alt | escape
+            assign has_video = false
+            if block.settings.video != null or block.settings.video_url != null
+              assign has_video = true
+            endif
+            assign loading = 'lazy'
+            assign priority = 'auto'
+            if forloop.first and section.index == 1
+              assign loading = 'eager'
+              assign priority = 'high'
+            endif
+          -%}
+          <div
+            class="hero-video__slide"
+            id="Slide-{{ section.id }}-{{ forloop.index }}"
+            role="group"
+            aria-roledescription="{{ 'sections.slideshow.slide' | t }}"
+            aria-label="{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+            {% if has_video %}
+              data-has-video
+            {% endif %}
+            {{ block.shopify_attributes }}
+          >
+            <div class="hero-video__media">
+              {%- if poster != blank -%}
+                {{
+                  poster
+                  | image_url: width: 3840
+                  | image_tag:
+                    loading: loading,
+                    fetchpriority: priority,
+                    sizes: '100vw',
+                    widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+                    alt: slide_alt,
+                    class: 'hero-video__poster'
+                }}
+              {%- elsif block.settings.bundled_image != 'none' -%}
+                {%- comment -%} Demo art shipped with the theme (assets/hero-slide-N.jpg, 2400px wide) {%- endcomment -%}
+                <img
+                  src="{{ block.settings.bundled_image | asset_img_url: '1500x' }}"
+                  srcset="
+                    {%- for w in bundled_widths -%}
+                      {%- assign bundled_size = w | append: 'x' -%}
+                      {{ block.settings.bundled_image | asset_img_url: bundled_size }} {{ w }}w{% unless forloop.last %}, {% endunless %}
+                    {%- endfor -%}
+                  "
+                  sizes="100vw"
+                  alt="{{ block.settings.alt | escape }}"
+                  width="2400"
+                  height="1600"
+                  loading="{{ loading }}"
+                  fetchpriority="{{ priority }}"
+                  class="hero-video__poster"
+                >
+              {%- else -%}
+                {{ 'lifestyle-2' | placeholder_svg_tag: 'hero-video__placeholder placeholder-svg' }}
+              {%- endif -%}
+            </div>
+
+            {%- if has_video -%}
+              <template class="hero-video__template">
+                {%- if block.settings.video != null -%}
+                  {{
+                    block.settings.video
+                    | video_tag:
+                      image_size: '1100x',
+                      autoplay: true,
+                      loop: true,
+                      muted: true,
+                      controls: false,
+                      playsinline: true,
+                      aria-hidden: true
+                  }}
+                {%- elsif block.settings.video_url.type == 'youtube' -%}
+                  <iframe
+                    src="https://www.youtube.com/embed/{{ video_id }}?autoplay=1&mute=1&loop=1&playlist={{ video_id }}&controls=0&playsinline=1&enablejsapi=1"
+                    class="hero-video__iframe"
+                    allow="autoplay; encrypted-media"
+                    title="{{ slide_alt }}"
+                    tabindex="-1"
+                  ></iframe>
+                {%- else -%}
+                  <iframe
+                    src="https://player.vimeo.com/video/{{ video_id }}?autoplay=1&muted=1&loop=1&background=1"
+                    class="hero-video__iframe"
+                    allow="autoplay; encrypted-media"
+                    title="{{ slide_alt }}"
+                    tabindex="-1"
+                  ></iframe>
+                {%- endif -%}
+              </template>
+            {%- endif -%}
+          </div>
+        {%- else -%}
+          <div class="hero-video__slide">
+            <div class="hero-video__media">
+              {{ 'lifestyle-2' | placeholder_svg_tag: 'hero-video__placeholder placeholder-svg' }}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if overlay_layout -%}
+        <div class="hero-video__overlay" aria-hidden="true"></div>
+        <div class="hero-video__content hero-video__content--{{ section.settings.content_position }}">
+          {{ intro_content }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if show_controls or section.settings.autoplay -%}
+      <div class="hero-video__controls{% unless show_controls %} hero-video__controls--single{% endunless %}">
+        {%- if show_controls -%}
+          <button
+            type="button"
+            class="hero-video__button hero-video__button--prev"
+            name="previous"
+            aria-label="{{ 'sections.slideshow.previous_slideshow' | t }}"
+            aria-controls="HeroVideoTrack-{{ section.id }}"
+          >
+            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+          </button>
+          <div class="hero-video__dots">
+            {%- for block in section.blocks -%}
+              <button
+                type="button"
+                class="hero-video__dot{% if forloop.first %} is-active{% endif %}"
+                aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+                aria-controls="HeroVideoTrack-{{ section.id }}"
+                {% if forloop.first %}
+                  aria-current="true"
+                {% endif %}
+              >
+                <span class="hero-video__dot-mark"></span>
+              </button>
+            {%- endfor -%}
+          </div>
+          <button
+            type="button"
+            class="hero-video__button hero-video__button--next"
+            name="next"
+            aria-label="{{ 'sections.slideshow.next_slideshow' | t }}"
+            aria-controls="HeroVideoTrack-{{ section.id }}"
+          >
+            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+          </button>
+        {%- endif -%}
+        {%- if section.settings.autoplay -%}
+          <button
+            type="button"
+            class="hero-video__button hero-video__autoplay"
+            aria-label="{{ 'sections.slideshow.pause_slideshow' | t }}"
+            data-label-pause="{{ 'sections.slideshow.pause_slideshow' | t }}"
+            data-label-play="{{ 'sections.slideshow.play_slideshow' | t }}"
+          >
+            <span class="svg-wrapper hero-video__icon-pause">{{- 'icon-pause.svg' | inline_asset_content -}}</span>
+            <span class="svg-wrapper hero-video__icon-play">{{- 'icon-play.svg' | inline_asset_content -}}</span>
+          </button>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </hero-video>
+</div>
+
+{% schema %}
+{
+  "name": "Hero video",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "A curated selection of exceptional art by emerging talent."
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_outline",
+      "label": "Use outline button",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "text_layout",
+      "options": [
+        {
+          "value": "above",
+          "label": "Above media (editorial)"
+        },
+        {
+          "value": "overlay",
+          "label": "On top of media (overlay)"
+        }
+      ],
+      "default": "above",
+      "label": "Text position"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "center",
+      "label": "Content position",
+      "info": "Applies to overlay layout."
+    },
+    {
+      "type": "header",
+      "content": "Slideshow"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": true,
+      "info": "Rotates slides and plays videos muted. Off for visitors who prefer reduced motion."
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 9,
+      "step": 1,
+      "unit": "s",
+      "label": "Change slides every",
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "accessibility_label",
+      "label": "Slideshow description",
+      "info": "Describe the slideshow for those using screen readers. Defaults to the heading."
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "media_height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to first slide"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "small",
+      "label": "Media height",
+      "info": "Applies to text above media."
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full-width media",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#103948",
+      "info": "Applies to overlay layout."
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 30,
+      "info": "Applies to overlay layout."
+    },
+    {
+      "type": "range",
+      "id": "overlay_height",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "unit": "svh",
+      "label": "Overlay hero height",
+      "default": 70,
+      "info": "Applies to overlay layout."
+    },
+    {
+      "type": "range",
+      "id": "intro_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading top padding",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "intro_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading bottom padding",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Also used as the poster while a video loads."
+        },
+        {
+          "type": "select",
+          "id": "bundled_image",
+          "label": "Bundled demo image",
+          "default": "none",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "hero-slide-1.jpg",
+              "label": "Abstract — blue and orange"
+            },
+            {
+              "value": "hero-slide-2.jpg",
+              "label": "Abstract — terracotta and pink"
+            },
+            {
+              "value": "hero-slide-3.jpg",
+              "label": "Abstract — color shapes"
+            }
+          ],
+          "info": "Used when no image is selected. Photos from Unsplash (Unsplash License)."
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Alt text",
+          "info": "Defaults to the image's alt text."
+        },
+        {
+          "type": "header",
+          "content": "Video (optional)"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify-hosted video"
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "accept": [
+            "youtube",
+            "vimeo"
+          ],
+          "label": "Or embed from URL",
+          "info": "Used when no Shopify-hosted video is selected. Add an image as the poster."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero video",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "bundled_image": "hero-slide-1.jpg"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "bundled_image": "hero-slide-2.jpg"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "bundled_image": "hero-slide-3.jpg"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

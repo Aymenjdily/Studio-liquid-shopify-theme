@@ -1,0 +1,65 @@
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "shop": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Shop",
+            "menu": "",
+            "fallback_links": "Prints | /collections/types?q=Print\nOriginals | /collections/types?q=Original\nArt Objects | /collections/types?q=Art%20Object\nSearch | /search"
+          }
+        },
+        "info": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Info",
+            "menu": "",
+            "fallback_links": "Journal | /blogs/news\nContact | /pages/contact"
+          }
+        },
+        "logo": {
+          "type": "image",
+          "settings": {
+            "image_width": 100,
+            "alignment": "right",
+            "use_wordmark": true
+          }
+        },
+        "mission": {
+          "type": "text",
+          "settings": {
+            "heading": "Our mission",
+            "subtext": "<p>We curate affordably priced pieces from the most exciting up-and-coming artists.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "shop",
+        "info",
+        "logo",
+        "mission"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "newsletter_enable": true,
+        "newsletter_heading": "Subscribe to our emails",
+        "enable_follow_on_shop": false,
+        "show_social": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "payment_enable": true,
+        "show_policy": false,
+        "margin_top": 0,
+        "padding_top": 44,
+        "padding_bottom": 32
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

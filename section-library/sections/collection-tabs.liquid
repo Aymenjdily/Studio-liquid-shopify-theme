@@ -1,0 +1,391 @@
+{{ 'section-collection-tabs.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'collection-tabs.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign tab_count = section.blocks.size
+  assign show_tabs = false
+  if tab_count > 1
+    assign show_tabs = true
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-heading-padding {
+    padding-top: {{ section.settings.heading_padding_top | times: 0.75 | round: 0 }}px;
+  }
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-heading-padding {
+      padding-top: {{ section.settings.heading_padding_top }}px;
+    }
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  #CollectionTabs-{{ section.id }} {
+    --tabs-columns: {{ section.settings.columns_desktop }};
+  }
+{%- endstyle -%}
+
+{%- comment -%}
+  Renders one tab's product grid. Output is captured per block so inactive
+  tabs can be shipped inside a <template> and only parsed when opened.
+{%- endcomment -%}
+{%- capture placeholder_cards -%}
+  {%- for i in (1..section.settings.products_to_show) -%}
+    <li class="collection-tabs__item grid__item">
+      {%- render 'card-product',
+        show_vendor: section.settings.show_vendor,
+        media_aspect_ratio: section.settings.image_ratio,
+        lazy_load: false,
+        skip_styles: true,
+        placeholder_image: 'product-apparel-1'
+      -%}
+    </li>
+  {%- endfor -%}
+{%- endcapture -%}
+
+<collection-tabs
+  id="CollectionTabs-{{ section.id }}"
+  class="collection-tabs color-{{ section.settings.color_scheme }} gradient{% if section.settings.mobile_carousel %} collection-tabs--carousel{% endif %}"
+  data-section-id="{{ section.id }}"
+>
+  {%- unless section.settings.heading == blank and show_tabs == false -%}
+    <div class="collection-tabs__header page-width section-{{ section.id }}-heading-padding">
+      {%- unless section.settings.heading == blank -%}
+        <h2 class="collection-tabs__heading {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+      {%- endunless -%}
+
+      {%- if show_tabs -%}
+        <div
+          class="collection-tabs__tablist"
+          role="tablist"
+          {% unless section.settings.heading == blank %}
+            aria-label="{{ section.settings.heading | strip_html | escape }}"
+          {% endunless %}
+        >
+          {%- for block in section.blocks -%}
+            <button
+              type="button"
+              class="collection-tabs__tab"
+              id="Tab-{{ section.id }}-{{ forloop.index }}"
+              role="tab"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              aria-controls="TabPanel-{{ section.id }}-{{ forloop.index }}"
+              {% unless forloop.first %}
+                tabindex="-1"
+              {% endunless %}
+              data-tab="{{ block.settings.label | default: block.settings.collection.title | default: 'products' | handle }}"
+              {{ block.shopify_attributes }}
+            >
+              {{- block.settings.label | default: block.settings.collection.title | default: 'Products' | escape -}}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endunless -%}
+
+  <div class="collection-tabs__body page-width page-width-desktop section-{{ section.id }}-padding">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign collection = block.settings.collection
+        assign tab_products = collection.products
+        if block.settings.products != blank
+          assign tab_products = block.settings.products
+        endif
+        assign lazy_load = true
+        if forloop.first and section.index < 3
+          assign lazy_load = false
+        endif
+      -%}
+      {%- capture panel_content -%}
+        <ul
+          class="collection-tabs__grid product-grid contains-card contains-card--product contains-card--standard"
+          role="list"
+          aria-label="{{ block.settings.label | default: collection.title | escape }}"
+        >
+          {%- if tab_products.size > 0 -%}
+            {%- for product in tab_products limit: section.settings.products_to_show -%}
+              <li class="collection-tabs__item grid__item">
+                {%- render 'card-product',
+                  card_product: product,
+                  media_aspect_ratio: section.settings.image_ratio,
+                  show_secondary_image: section.settings.show_secondary_image,
+                  show_vendor: section.settings.show_vendor,
+                  show_rating: false,
+                  lazy_load: lazy_load,
+                  skip_styles: true,
+                  section_id: section.id,
+                  quick_add: 'none'
+                -%}
+              </li>
+            {%- endfor -%}
+          {%- else -%}
+            {{ placeholder_cards }}
+          {%- endif -%}
+        </ul>
+
+        {%- if section.settings.mobile_carousel -%}
+          <div class="collection-tabs__pager" hidden>
+            <button
+              type="button"
+              class="collection-tabs__pager-button"
+              data-step="-1"
+              aria-label="{{ 'general.slider.previous_slide' | t }}"
+            >
+              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            </button>
+            <div class="collection-tabs__counter caption" aria-hidden="true">
+              <span class="collection-tabs__counter-current">1</span>
+              <span>/</span>
+              <span class="collection-tabs__counter-total">1</span>
+            </div>
+            <button
+              type="button"
+              class="collection-tabs__pager-button"
+              data-step="1"
+              aria-label="{{ 'general.slider.next_slide' | t }}"
+            >
+              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            </button>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.show_view_all and collection != blank and collection.products_count > section.settings.products_to_show -%}
+          <div class="collection-tabs__view-all">
+            <a href="{{ collection.url }}" class="button">
+              {{- 'sections.featured_collection.view_all' | t -}}
+              <span class="visually-hidden">({{ collection.title | escape }})</span>
+            </a>
+          </div>
+        {%- endif -%}
+      {%- endcapture -%}
+
+      <div
+        class="collection-tabs__panel"
+        id="TabPanel-{{ section.id }}-{{ forloop.index }}"
+        {% if show_tabs %}
+          role="tabpanel" aria-labelledby="Tab-{{ section.id }}-{{ forloop.index }}" tabindex="0"
+        {% endif %}
+        {% unless forloop.first %}
+          hidden
+        {% endunless %}
+      >
+        {%- if forloop.first -%}
+          {{ panel_content }}
+        {%- else -%}
+          <template class="collection-tabs__template">{{ panel_content }}</template>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      <div class="collection-tabs__panel">
+        <ul class="collection-tabs__grid product-grid contains-card contains-card--product contains-card--standard" role="list">
+          {{ placeholder_cards }}
+        </ul>
+      </div>
+    {%- endfor -%}
+  </div>
+</collection-tabs>
+
+{% schema %}
+{
+  "name": "Collection tabs",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Explore our newest pieces"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        }
+      ],
+      "default": "h2",
+      "label": "Heading size"
+    },
+    {
+      "type": "paragraph",
+      "content": "Tabs appear when the section has two or more collection blocks. Link to a tab with ?tab=<tab-label>."
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Products per tab",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_carousel",
+      "label": "Swipe on mobile",
+      "default": true,
+      "info": "Below 990px, products scroll sideways with the next card peeking in."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show \"View all\" button",
+      "default": false,
+      "info": "Shown when a collection has more products than are displayed."
+    },
+    {
+      "type": "header",
+      "content": "Product card"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "portrait",
+      "label": "Image ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "label": "Show second image on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading top padding",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Products top padding",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Collection tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab label",
+          "info": "Defaults to the collection title."
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "Or pick products",
+          "limit": 12,
+          "info": "Picked products replace the collection for this tab."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection tabs",
+      "blocks": [
+        {
+          "type": "tab"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,249 @@
+/* Section Library — collection tabs (Shopify Studio design language)
+ *
+ * With one tab this reproduces Studio's "Explore our newest pieces" block:
+ * centered h2, then a 3-up product grid with 40px gaps on desktop and a
+ * peeking swipe row (142px cards at 390px) with a "‹ 1/2 ›" pager below 990px.
+ * Card markup comes from Dawn's card-product snippet.
+ */
+
+/* ---------- Header ---------- */
+
+.collection-tabs__header {
+  text-align: center;
+}
+
+.collection-tabs__heading {
+  margin: 0 auto;
+  width: calc(100% - 5rem / var(--font-body-scale));
+}
+
+@media screen and (min-width: 750px) {
+  .collection-tabs__heading {
+    max-width: 50rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .collection-tabs__heading {
+    max-width: 78rem;
+  }
+}
+
+/* ---------- Tabs (only rendered with 2+ collections) ---------- */
+
+.collection-tabs__tablist {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem 2.4rem;
+  margin-top: 2rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.collection-tabs__tablist::-webkit-scrollbar {
+  display: none;
+}
+
+.collection-tabs__tab {
+  flex-shrink: 0;
+  padding: 1.1rem 0.2rem;
+  border: none;
+  background: none;
+  font-family: var(--font-body-family);
+  font-size: 1.5rem;
+  letter-spacing: 0.06rem;
+  color: rgba(var(--color-foreground), 0.75);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.6rem;
+  transition: color var(--duration-short, 100ms) ease, text-decoration-color var(--duration-short, 100ms) ease;
+}
+
+.collection-tabs__tab:hover {
+  color: rgb(var(--color-foreground));
+}
+
+.collection-tabs__tab[aria-selected='true'] {
+  color: rgb(var(--color-foreground));
+  text-decoration-color: currentColor;
+}
+
+.collection-tabs__tab:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: 0.3rem;
+}
+
+.collection-tabs__panel:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: 0.3rem;
+}
+
+/* ---------- Grid (desktop / no-carousel) ---------- */
+
+.collection-tabs__grid {
+  --tabs-gap: var(--grid-mobile-horizontal-spacing);
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--grid-mobile-vertical-spacing) var(--tabs-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.collection-tabs__item {
+  width: calc((100% - var(--tabs-gap)) / 2);
+  max-width: none;
+  margin: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .collection-tabs__grid {
+    --tabs-gap: var(--grid-desktop-horizontal-spacing);
+    row-gap: var(--grid-desktop-vertical-spacing);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .collection-tabs__grid {
+    margin: 1.6rem 0 2rem;
+  }
+}
+
+@media screen and (min-width: 750px) {
+
+  .collection-tabs__item {
+    width: calc((100% - var(--tabs-gap) * (var(--tabs-columns) - 1)) / var(--tabs-columns));
+  }
+}
+
+/* ---------- Mobile/tablet carousel (Studio "grid--peek") ---------- */
+
+@media screen and (max-width: 989px) {
+  .collection-tabs--carousel .collection-tabs__grid {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scroll-padding-left: 1.5rem;
+    scrollbar-width: none;
+    margin-bottom: 1.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .collection-tabs--carousel .collection-tabs__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .collection-tabs--carousel .collection-tabs__item {
+    flex-shrink: 0;
+    width: calc(50% - var(--tabs-gap) - 3rem);
+    padding-block: 0.5rem;
+    scroll-snap-align: start;
+  }
+
+  .collection-tabs--carousel .collection-tabs__item:first-child {
+    margin-left: 1.5rem;
+  }
+
+  /* Trailing space so the last card can snap clear of the edge. */
+  .collection-tabs--carousel .collection-tabs__grid::after {
+    content: '';
+    flex: 0 0 1.5rem;
+    margin-left: calc(-1 * var(--tabs-gap));
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .collection-tabs--carousel .collection-tabs__item {
+    width: calc(33.333% - var(--tabs-gap) - 2rem);
+  }
+
+  .collection-tabs--carousel .collection-tabs__item:first-child {
+    margin-left: 5rem;
+  }
+
+  .collection-tabs--carousel .collection-tabs__grid {
+    scroll-padding-left: 5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collection-tabs__grid {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------- Pager (Studio slider buttons + counter) ---------- */
+
+.collection-tabs__pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.collection-tabs__pager[hidden] {
+  display: none;
+}
+
+.collection-tabs__pager-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: rgba(var(--color-foreground), 0.75);
+  cursor: pointer;
+}
+
+.collection-tabs__pager-button:not([disabled]):hover {
+  color: rgb(var(--color-foreground));
+}
+
+.collection-tabs__pager-button[disabled] {
+  color: rgba(var(--color-foreground), 0.3);
+  cursor: not-allowed;
+}
+
+.collection-tabs__pager-button .svg-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  transform: rotate(-90deg);
+}
+
+.collection-tabs__pager-button[data-step='-1'] .svg-wrapper {
+  transform: rotate(90deg);
+}
+
+.collection-tabs__pager-button .icon {
+  height: 0.6rem;
+}
+
+.collection-tabs__counter {
+  display: flex;
+  justify-content: center;
+  gap: 0.2rem;
+  min-width: 4.4rem;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+@media screen and (min-width: 990px) {
+  .collection-tabs__pager {
+    display: none;
+  }
+}
+
+/* ---------- View all ---------- */
+
+.collection-tabs__view-all {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}

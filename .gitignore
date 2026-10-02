@@ -1,0 +1,8 @@
+# Agent skills are restored from skills-lock.json
+.agents/
+.kilo/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+node_modules/

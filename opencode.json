@@ -1,0 +1,1 @@
+﻿{"$schema": "https://opencode.ai/config.json", "mcp": {"shopify-dev-mcp": {"type": "local", "command": ["cmd", "/c", "npx", "-y", "@shopify/dev-mcp@latest"], "enabled": true}}}

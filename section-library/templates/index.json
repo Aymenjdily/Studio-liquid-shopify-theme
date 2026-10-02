@@ -1,0 +1,433 @@
+{
+  "sections": {
+    "hero_banner": {
+      "type": "hero-video",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "text_layout": "above",
+        "heading": "A curated selection of exceptional art by emerging talent.",
+        "heading_size": "h1",
+        "media_height": "small",
+        "full_width": false,
+        "autoplay": true,
+        "autoplay_speed": 3,
+        "overlay_opacity": 30,
+        "content_position": "center",
+        "intro_padding_top": 20,
+        "intro_padding_bottom": 52
+      },
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "bundled_image": "hero-slide-1.jpg",
+            "alt": "Abstract painting with blue, orange and cream brushstrokes"
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "bundled_image": "hero-slide-2.jpg",
+            "alt": "Abstract painting in terracotta, blush pink and ochre"
+          }
+        },
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "bundled_image": "hero-slide-3.jpg",
+            "alt": "Abstract painting with bold red, blue and white shapes"
+          }
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_2",
+        "slide_3"
+      ]
+    },
+    "image_banner": {
+      "type": "image-banner",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Browse our latest products",
+            "heading_size": "h0"
+          }
+        },
+        "button": {
+          "type": "buttons",
+          "settings": {
+            "button_label_1": "Shop all",
+            "button_link_1": "shopify://collections/all",
+            "button_style_secondary_1": true,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "button"
+      ],
+      "settings": {
+        "image_overlay_opacity": 40,
+        "image_height": "large",
+        "desktop_content_position": "bottom-center",
+        "show_text_box": false,
+        "image_behavior": "none",
+        "desktop_content_alignment": "center",
+        "color_scheme": "scheme-3",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": false,
+        "show_text_below": false
+      },
+      "disabled": true
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Featured products",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "all",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "color_scheme": "scheme-1",
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "enable_desktop_slider": false,
+        "swipe_on_mobile": false,
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "padding_top": 44,
+        "padding_bottom": 36
+      },
+      "disabled": true
+    },
+    "newest_pieces": {
+      "type": "collection-tabs",
+      "blocks": {
+        "tab_1": {
+          "type": "tab",
+          "settings": {
+            "label": "Newest",
+            "collection": "automated-collection",
+            "products": [
+              "night-garden-i",
+              "saffron-hours",
+              "tulip-study"
+            ]
+          }
+        }
+      },
+      "block_order": [
+        "tab_1"
+      ],
+      "settings": {
+        "heading": "Explore our newest pieces",
+        "heading_size": "h2",
+        "products_to_show": 3,
+        "columns_desktop": 3,
+        "mobile_carousel": true,
+        "show_view_all": false,
+        "image_ratio": "portrait",
+        "show_secondary_image": true,
+        "show_vendor": true,
+        "color_scheme": "scheme-1",
+        "heading_padding_top": 56,
+        "padding_top": 28,
+        "padding_bottom": 0
+      }
+    },
+    "expertly_curated": {
+      "type": "collection-tabs",
+      "blocks": {
+        "tab_1": {
+          "type": "tab",
+          "settings": {
+            "label": "Art objects",
+            "collection": "automated-collection",
+            "products": [
+              "oxblood-bud-vase",
+              "white-belly-jar",
+              "cobalt-bud-vase"
+            ]
+          }
+        }
+      },
+      "block_order": [
+        "tab_1"
+      ],
+      "settings": {
+        "heading": "Expertly curated, affordably priced",
+        "heading_size": "h2",
+        "products_to_show": 3,
+        "columns_desktop": 3,
+        "mobile_carousel": true,
+        "show_view_all": false,
+        "image_ratio": "portrait",
+        "show_secondary_image": true,
+        "show_vendor": true,
+        "color_scheme": "scheme-1",
+        "heading_padding_top": 28,
+        "padding_top": 24,
+        "padding_bottom": 32
+      }
+    },
+    "mosaic_aesthetic": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Each piece is chosen to reflect a cohesive, contemporary aesthetic.",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "heading"
+      ],
+      "settings": {
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-3",
+        "bundled_image": "mosaic-art.jpg|0.75",
+        "bundled_image_alt": "Close-up of a thickly painted abstract canvas in pink, violet and orange",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "middle",
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "mosaic_collection": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Build or enhance your collection",
+            "heading_size": "h2"
+          }
+        },
+        "button": {
+          "type": "button",
+          "settings": {
+            "button_label": "Explore",
+            "button_link": "shopify://collections/all",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "button"
+      ],
+      "settings": {
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-3",
+        "bundled_image": "mosaic-room.jpg|1.3579",
+        "bundled_image_alt": "A bright living room with a large colourful painting above a white sofa",
+        "height": "adapt",
+        "desktop_image_width": "large",
+        "layout": "image_first",
+        "desktop_content_position": "bottom",
+        "padding_top": 0,
+        "padding_bottom": 52
+      }
+    },
+    "shop_by_artist_intro": {
+      "type": "rich-text",
+      "blocks": {
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>SHOP BY ARTIST</p>"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Inspired collections that complement your space and style.",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "text",
+        "heading"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-3",
+        "full_width": true,
+        "padding_top": 84,
+        "padding_bottom": 84
+      }
+    },
+    "shop_by_artist": {
+      "type": "collection-list",
+      "blocks": {
+        "artist_1": {
+          "type": "artist",
+          "settings": {
+            "artist_name": "Mara Okafor",
+            "product": "night-garden-i",
+            "link": ""
+          }
+        },
+        "artist_2": {
+          "type": "artist",
+          "settings": {
+            "artist_name": "Juno Lindqvist",
+            "product": "cypress-road",
+            "link": ""
+          }
+        },
+        "artist_3": {
+          "type": "artist",
+          "settings": {
+            "artist_name": "Ines Duarte",
+            "product": "pagoda-at-dusk",
+            "link": ""
+          }
+        },
+        "artist_4": {
+          "type": "artist",
+          "settings": {
+            "artist_name": "Theo Marchetti",
+            "product": "stoneware-vessels-set-of-three",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "artist_1",
+        "artist_2",
+        "artist_3",
+        "artist_4"
+      ],
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_ratio": "square",
+        "columns_desktop": 2,
+        "color_scheme": "scheme-3",
+        "show_view_all": false,
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 0,
+        "padding_bottom": 68
+      }
+    },
+    "newsletter": {
+      "type": "newsletter-signup",
+      "settings": {
+        "artwork_product": "low-tide-blue",
+        "artwork_frame_size": 86,
+        "heading": "Be the first to know",
+        "heading_size": "h1",
+        "subheading": "<p>Join our email list to learn about exclusive showings and new collections.</p>",
+        "placeholder": "Email",
+        "button_label": "Subscribe",
+        "success_message": "Thanks for subscribing. Watch your inbox for our next showing.",
+        "error_message": "Please enter a valid email address.",
+        "show_consent": false,
+        "tags": "newsletter",
+        "color_scheme": "scheme-1",
+        "padding_top": 68,
+        "padding_bottom": 84
+      }
+    },
+    "founder_note": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "We offer a highly curated selection, so buyers are not overwhelmed by choice. Our collection is updated frequently with new works by current and incoming artists but quality, not quantity, is our focus.",
+            "heading_size": "h2"
+          }
+        },
+        "caption": {
+          "type": "caption",
+          "settings": {
+            "caption": "Noor Haddad — founder",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        },
+        "button": {
+          "type": "button",
+          "settings": {
+            "button_label": "Read more",
+            "button_link": "shopify://pages/contact",
+            "button_style_secondary": false
+          }
+        },
+        "spacer_text": {
+          "type": "text",
+          "settings": {
+            "text": "<p> </p>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "spacer_text",
+        "caption",
+        "button"
+      ],
+      "settings": {
+        "bundled_image": "founder-art.jpg|0.6032",
+        "bundled_image_alt": "Close-up of a bold abstract painting in yellow, orange and white",
+        "height": "adapt",
+        "desktop_image_width": "small",
+        "layout": "image_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "bottom",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-3",
+        "padding_top": 0,
+        "padding_bottom": 76
+      }
+    }
+  },
+  "order": [
+    "hero_banner",
+    "newest_pieces",
+    "mosaic_aesthetic",
+    "mosaic_collection",
+    "expertly_curated",
+    "shop_by_artist_intro",
+    "shop_by_artist",
+    "newsletter",
+    "founder_note",
+    "image_banner",
+    "featured_collection"
+  ]
+}

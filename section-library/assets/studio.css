@@ -1,0 +1,149 @@
+/* Studio preset deltas on top of Dawn v16 base.css.
+ * Each rule restores a value measured on theme-studio-demo.myshopify.com
+ * where Dawn v16 has drifted from the Dawn release Studio ships on. */
+
+/* Header icons: Studio has no trailing padding and sizes icons in rem,
+   so they scale with the 110% body font scale (44px -> 48.4px). */
+.header__icons {
+  padding-right: 0;
+}
+
+.header__icon .svg-wrapper {
+  width: 4.4rem;
+  height: 4.4rem;
+}
+
+/* Mobile/tablet header: Studio pads 1rem / 1.5rem below the desktop
+   breakpoint (v16 uses half the padding settings and 3rem sides). */
+@media screen and (max-width: 989px) {
+  .section-header .header {
+    padding: 1rem 1.5rem;
+  }
+}
+
+/* Built-in SVG wordmark (snippets/logo-wordmark.liquid) inherits the
+   header text color and sizes like an uploaded logo image. */
+.header__heading-logo--wordmark {
+  display: block;
+  height: auto;
+  color: rgb(var(--color-foreground));
+}
+
+/* Product cards: Studio keeps the title's natural 1em bottom margin
+   (v16 zeroes it) and the card's tighter line-height wins over .price. */
+.card__information .card__heading {
+  margin-bottom: 1em;
+}
+
+.card-information > .price {
+  line-height: calc(1 + 0.4 / var(--font-body-scale));
+}
+
+/* Framed artwork mockup (Studio product cards).
+   snippets/card-product.liquid adds .media--framed + --art-ratio for the
+   product types listed in Theme settings > Framed artwork. The featured image
+   hangs in a frame on a "wall"; on hover/focus the frame grows until the
+   artwork fills the whole card, like Studio's unframed secondary image.
+   Sizes use container units so the frame scales with any card size. */
+.media.media--framed {
+  container-type: size;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--framed-wall-color) 55%, #fff) 0%, var(--framed-wall-color) 70%);
+}
+
+/* .framed-art lets non-card sections (e.g. newsletter-signup) reuse the frame. */
+:is(.card__media, .framed-art) .media.media--framed > img {
+  --frame-w: min(calc(var(--framed-size) * 1cqw), calc(var(--framed-size) * 1cqh * var(--art-ratio)));
+  --frame-h: calc(var(--frame-w) / var(--art-ratio));
+  --frame-border: 2.2cqw;
+
+  box-sizing: content-box;
+  top: calc((100cqh - var(--frame-h)) / 2 - var(--frame-border));
+  left: calc((100cqw - var(--frame-w)) / 2 - var(--frame-border));
+  width: var(--frame-w);
+  height: var(--frame-h);
+  border: var(--frame-border) solid var(--framed-frame-color);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.04),
+    0 0.4cqw 0.8cqw rgba(0, 0, 0, 0.1),
+    0 1.6cqw 3.2cqw -0.8cqw rgba(0, 0, 0, 0.28);
+  object-fit: cover;
+  transition:
+    top 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    left 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    width 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    height 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-width 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.6s ease;
+}
+
+@media (hover: hover) {
+  .card-wrapper:hover .card__media .media.media--framed > img {
+    top: 0;
+    left: 0;
+    width: 100cqw;
+    height: 100cqh;
+    border-width: 0;
+    box-shadow: none;
+  }
+}
+
+.card-wrapper:focus-within .card__media .media.media--framed > img {
+  top: 0;
+  left: 0;
+  width: 100cqw;
+  height: 100cqh;
+  border-width: 0;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.card__media, .framed-art) .media.media--framed > img {
+    transition: none;
+  }
+}
+
+/* Full-width rich text on mobile: Studio's text column is the viewport
+   minus 8rem / body-scale, centered (v16 insets it from the padded box). */
+@media screen and (max-width: 749px) {
+  .rich-text--full-width .rich-text__wrapper {
+    width: 100%;
+  }
+
+  .rich-text--full-width .rich-text__blocks {
+    width: min(100%, calc(100vw - 8rem / var(--font-body-scale)));
+  }
+}
+
+/* Footer image block falling back to the built-in wordmark. */
+.footer-block__wordmark {
+  display: inline-block;
+  width: 100%;
+  color: rgb(var(--color-foreground));
+}
+
+/* Footer newsletter: Studio renders an (empty) social list beside it, so the
+   newsletter is never :only-child there: left-aligned on desktop and full
+   column width on mobile. v16 omits the empty list, centring and shrinking it. */
+@media screen and (min-width: 750px) {
+  .footer-block__newsletter,
+  .footer-block__newsletter .footer-block__heading {
+    text-align: left;
+    margin-right: auto;
+  }
+
+  .footer-block__newsletter .footer__newsletter {
+    justify-content: flex-start;
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .footer-block__newsletter {
+    align-self: stretch;
+  }
+
+  .footer-block__newsletter .footer__newsletter,
+  .footer-block__newsletter .newsletter-form__field-wrapper {
+    width: 100%;
+  }
+}

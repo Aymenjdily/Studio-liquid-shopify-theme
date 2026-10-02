@@ -1,0 +1,86 @@
+{% comment %}
+  Renders an artist card for the collection list (Studio "Shop by artist").
+  Same markup as card-collection, but sourced from a vendor name and one of the
+  artist's products, so it works before per-artist collections exist. The
+  product image is shown framed on a wall (studio.css .media--framed) when its
+  product type is listed in Theme settings > Framed artwork.
+
+  Accepts:
+  - artist_name: {String} Artist / vendor name
+  - artist_product: {Object} Product whose featured image represents the artist
+  - artist_link: {String} URL (optional, defaults to the vendor page)
+  - media_aspect_ratio: {String} "square", "portrait" or "adapt" (optional)
+
+  Usage:
+  {% render 'card-artist', artist_name: block.settings.artist_name, artist_product: block.settings.product %}
+{% endcomment %}
+
+{%- liquid
+  assign media = artist_product.featured_media
+  assign ratio = 1
+  if media_aspect_ratio == 'portrait'
+    assign ratio = 0.8
+  endif
+  assign name = artist_name | default: artist_product.vendor
+  # Frame only artwork types (Theme settings > Framed artwork), like product cards.
+  assign framed_list = settings.framed_product_types | downcase | replace: ', ', ',' | replace: ' ,', ',' | prepend: ',' | append: ','
+  assign framed_key = artist_product.type | downcase | default: 'no-type' | prepend: ',' | append: ','
+  assign framed = false
+  if framed_list contains framed_key
+    assign framed = true
+  endif
+  assign url = artist_link
+  if url == blank
+    assign url = name | url_for_vendor
+  endif
+-%}
+
+<div class="card-wrapper animate-arrow collection-card-wrapper">
+  <div
+    class="card card--{{ settings.collection_card_style }}{% if media %} card--media{% else %} card--text{% endif %}"
+    style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
+  >
+    <div
+      class="card__inner color-{{ settings.collection_card_color_scheme }} gradient ratio"
+      style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
+    >
+      <div class="card__media">
+        {%- if media -%}
+          <div
+            class="media media--transparent{% if framed %} media--framed{% else %} media--hover-effect{% endif %}"
+            {% if framed %}
+              style="--art-ratio: {{ media.aspect_ratio }};"
+            {% endif %}
+          >
+            {{
+              media
+              | image_url: width: 1500
+              | image_tag:
+                widths: '165, 330, 535, 750, 1000, 1500',
+                sizes: '(min-width: 1200px) 366px, (min-width: 750px) calc((100vw - 10rem) / 2), calc(100vw - 3rem)',
+                alt: name,
+                loading: 'lazy',
+                class: 'motion-reduce'
+            }}
+          </div>
+        {%- else -%}
+          <div class="media media--transparent">
+            {{ 'collection-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+    <div class="card__content">
+      <div class="card__information">
+        <h3 class="card__heading">
+          <a href="{{ url }}" class="full-unstyled-link">
+            {{- name | default: 'Artist name' | escape -}}
+            <span class="icon-wrap">
+              {{- 'icon-arrow.svg' | inline_asset_content -}}
+            </span>
+          </a>
+        </h3>
+      </div>
+    </div>
+  </div>
+</div>

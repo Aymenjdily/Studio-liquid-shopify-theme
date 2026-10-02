@@ -1,0 +1,416 @@
+/* Section Library — hero video (Shopify Studio design language)
+ *
+ * Editorial layout mirrors the Studio home hero 1:1: a centered serif
+ * headline (Studio rich-text measure) above a page-width slideshow at Dawn
+ * banner heights, with Studio's bordered control bar underneath.
+ * Values are in rem so they track the theme's body font scale like Studio.
+ */
+
+/* ---------- Intro (text above media) ---------- */
+
+.hero-video__intro {
+  text-align: center;
+}
+
+.hero-video__blocks {
+  margin: auto;
+  width: calc(100% - 8rem / var(--font-body-scale));
+}
+
+.hero-video__blocks > * {
+  margin-top: 0;
+  margin-bottom: 0;
+  overflow-wrap: break-word;
+}
+
+.hero-video__blocks > * + * {
+  margin-top: 2rem;
+}
+
+.hero-video__blocks > * + .button {
+  margin-top: 3rem;
+}
+
+@media screen and (min-width: 750px) {
+  .hero-video__blocks {
+    max-width: 50rem;
+    width: calc(100% - 15rem);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .hero-video__blocks {
+    max-width: 78rem;
+  }
+}
+
+.hero-video__subheading {
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+/* ---------- Stage ---------- */
+
+hero-video {
+  --hero-overlay-opacity: 0.3;
+  --hero-overlay-color: #103948;
+  --hero-overlay-height: 70svh;
+
+  position: relative;
+  display: block;
+}
+
+.hero-video__viewport {
+  position: relative;
+  display: grid;
+  grid-template: 1fr / 1fr;
+  isolation: isolate;
+}
+
+.hero-video__viewport > * {
+  grid-area: 1 / 1;
+}
+
+.hero-video__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hero-video__track::-webkit-scrollbar {
+  display: none;
+}
+
+.hero-video__slide {
+  position: relative;
+  display: grid;
+  grid-template: 1fr / 1fr;
+  flex: 0 0 100%;
+  overflow: hidden;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+.hero-video__slide > *,
+.hero-video__media > * {
+  grid-area: 1 / 1;
+}
+
+.hero-video__media {
+  display: grid;
+  min-height: 0;
+  background-color: rgba(var(--color-foreground), 0.1);
+}
+
+.hero-video__poster,
+.hero-video__placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- Heights (Dawn banner sizes) ---------- */
+
+.hero-video--small .hero-video__slide {
+  height: 28rem;
+}
+
+.hero-video--medium .hero-video__slide {
+  height: 34rem;
+}
+
+.hero-video--large .hero-video__slide {
+  height: 39rem;
+}
+
+.hero-video--adapt .hero-video__slide {
+  aspect-ratio: 16 / 9;
+}
+
+.hero-video--overlay .hero-video__slide {
+  height: auto;
+  aspect-ratio: auto;
+  min-height: var(--hero-overlay-height);
+}
+
+@media screen and (min-width: 750px) {
+  .hero-video--small .hero-video__slide {
+    height: 42rem;
+  }
+
+  .hero-video--medium .hero-video__slide {
+    height: 56rem;
+  }
+
+  .hero-video--large .hero-video__slide {
+    height: 72rem;
+  }
+}
+
+/* ---------- Hydrated video ---------- */
+
+.hero-video__template {
+  display: none;
+}
+
+.hero-video__slide[data-played] .hero-video__media {
+  visibility: hidden;
+}
+
+.hero-video__slide video,
+.hero-video__slide .hero-video__iframe {
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+  pointer-events: none;
+}
+
+/* Iframes can't object-fit: overscale so letterboxing is cropped away. */
+.hero-video__iframe {
+  transform: scale(1.35);
+}
+
+/* ---------- Overlay layout ---------- */
+
+.hero-video__overlay {
+  z-index: 3;
+  background-color: var(--hero-overlay-color);
+  opacity: var(--hero-overlay-opacity);
+  pointer-events: none;
+}
+
+.hero-video__content {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 5rem 1.5rem;
+  text-align: center;
+  color: #fff;
+  pointer-events: none;
+}
+
+.hero-video__content a {
+  pointer-events: auto;
+}
+
+.hero-video__content > * {
+  margin: 0;
+}
+
+.hero-video__content--bottom-left {
+  justify-content: flex-end;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.hero-video__content--bottom-right {
+  justify-content: flex-end;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.hero-video__content .hero-video__heading,
+.hero-video__content .hero-video__subheading,
+.hero-video__content .hero-video__eyebrow {
+  color: inherit;
+}
+
+@media screen and (min-width: 750px) {
+  .hero-video__content {
+    padding: 5rem;
+  }
+}
+
+.button--outline-light {
+  --color-button-text: 255, 255, 255;
+  background-color: transparent;
+  color: #fff;
+}
+
+/* ---------- Controls (Studio slideshow bar) ---------- */
+
+.hero-video__controls {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.hero-video__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: rgba(var(--color-foreground), 0.75);
+  cursor: pointer;
+}
+
+.hero-video__button:hover {
+  color: rgb(var(--color-foreground));
+}
+
+.hero-video__button .svg-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  transition: transform var(--duration-short, 100ms) ease;
+}
+
+.hero-video__button .icon {
+  height: 0.6rem;
+}
+
+.hero-video__button--prev .svg-wrapper {
+  transform: rotate(90deg);
+}
+
+.hero-video__button--next .svg-wrapper {
+  transform: rotate(-90deg);
+}
+
+.hero-video__button--prev:hover .svg-wrapper {
+  transform: rotate(90deg) scale(1.1);
+}
+
+.hero-video__button--next:hover .svg-wrapper {
+  transform: rotate(-90deg) scale(1.1);
+}
+
+.hero-video__dots {
+  display: flex;
+  justify-content: center;
+  min-width: 4.4rem;
+}
+
+.hero-video__dot {
+  padding: 0.7rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.hero-video__dot-mark {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.5);
+  transition: transform 0.2s ease-in-out;
+}
+
+.hero-video__dot.is-active .hero-video__dot-mark {
+  background-color: rgb(var(--color-foreground));
+  transform: scale(1.1);
+}
+
+.hero-video__dot:not(.is-active):hover .hero-video__dot-mark {
+  border-color: rgb(var(--color-foreground));
+  transform: scale(1.1);
+}
+
+/* Pause / play */
+.hero-video__autoplay {
+  position: absolute;
+  right: 0;
+}
+
+.hero-video__controls--single .hero-video__autoplay {
+  position: static;
+}
+
+.hero-video__autoplay .svg-wrapper {
+  position: absolute;
+  width: 0.8rem;
+  height: 1.2rem;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.hero-video__autoplay .icon {
+  width: 0.8rem;
+  height: 1.2rem;
+}
+
+.hero-video__autoplay .hero-video__icon-play .icon {
+  height: 1rem;
+}
+
+.hero-video__autoplay path {
+  fill: rgba(var(--color-foreground), 0.75);
+}
+
+.hero-video__autoplay:hover path {
+  fill: rgb(var(--color-foreground));
+}
+
+.hero-video__autoplay:hover .svg-wrapper {
+  transform: scale(1.1);
+}
+
+.hero-video__autoplay:not(.is-paused) .hero-video__icon-play,
+.hero-video__autoplay.is-paused .hero-video__icon-pause {
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+@media screen and (min-width: 750px) {
+  .hero-video__dot {
+    padding: 1rem;
+  }
+
+  .hero-video__dots {
+    margin: 0 1.2rem;
+  }
+
+  .hero-video__autoplay {
+    position: relative;
+    right: auto;
+    margin-left: 0.6rem;
+    padding: 0 0 0 0.6rem;
+    border-left: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  }
+}
+
+@media screen and (forced-colors: active) {
+  .hero-video__dot.is-active .hero-video__dot-mark {
+    background-color: CanvasText;
+  }
+
+  .hero-video__autoplay path {
+    fill: CanvasText;
+  }
+}
+
+/* ---------- Reduced motion: posters only, no smooth scroll ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-video__track {
+    scroll-behavior: auto;
+  }
+
+  .hero-video__slide video,
+  .hero-video__slide .hero-video__iframe {
+    display: none;
+  }
+
+  .hero-video__slide[data-played] .hero-video__media {
+    visibility: visible;
+  }
+}

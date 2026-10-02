@@ -1,0 +1,140 @@
+/* Section Library — newsletter signup (Shopify Studio design language)
+ *
+ * Reproduces Studio's closing "Be the first to know" block: a small framed
+ * artwork (396 x 276 at desktop, half the column on mobile), an h1, subtext,
+ * and Dawn's email field with an arrow button (component-newsletter.css).
+ * Spacing values are measured from theme-studio-demo.myshopify.com.
+ */
+
+.newsletter-signup__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ---------- Artwork ---------- */
+
+.newsletter-signup__art {
+  width: 50%;
+  aspect-ratio: 396 / 276;
+  margin-bottom: calc(var(--grid-mobile-vertical-spacing) + 9px);
+}
+
+.newsletter-signup__art > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.newsletter-signup__art .media {
+  height: 100%;
+}
+
+@media screen and (min-width: 750px) {
+  .newsletter-signup__art {
+    width: 36rem;
+    margin-bottom: 12px;
+  }
+}
+
+/* ---------- Copy ---------- */
+
+.newsletter-signup__heading,
+.newsletter-signup__subheading {
+  width: calc(100vw - 8rem / var(--font-body-scale));
+  max-width: 100%;
+  margin: 0;
+}
+
+.newsletter-signup__subheading {
+  max-width: 70rem;
+  margin-top: 2rem;
+}
+
+.newsletter-signup__subheading > * {
+  margin: 0;
+}
+
+/* ---------- Form ---------- */
+
+.newsletter-signup__form-wrap {
+  display: block;
+  width: calc(100vw - 8rem / var(--font-body-scale));
+  max-width: 100%;
+  margin-top: 2rem;
+}
+
+.newsletter-signup__form {
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.newsletter-signup__form .field__button .svg-wrapper {
+  display: flex;
+  width: 1.5rem;
+}
+
+/* Honeypot: off-screen, not display:none (some bots skip hidden inputs). */
+.newsletter-signup__trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.newsletter-signup__consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  width: 100%;
+  margin-top: 1.2rem;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.newsletter-signup__consent input {
+  flex-shrink: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin: 0.2rem 0 0;
+  accent-color: rgb(var(--color-button));
+}
+
+.newsletter-signup__message {
+  width: 100%;
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.newsletter-signup__message:empty {
+  display: none;
+}
+
+.newsletter-signup__message--success,
+.newsletter-signup__message--error {
+  margin-top: 1.2rem;
+}
+
+.newsletter-signup__message--error {
+  color: rgb(var(--color-foreground));
+}
+
+.newsletter-signup__message--error::before {
+  content: '! ';
+  font-weight: 700;
+}
+
+newsletter-signup[data-state='loading'] .field__button {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+newsletter-signup[data-state='success'] .newsletter-form__field-wrapper {
+  opacity: 0.55;
+}
